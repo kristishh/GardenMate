@@ -1,105 +1,48 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HeaderButton, Text } from '@react-navigation/elements';
-import {
-  createStaticNavigation,
-  StaticParamList,
-} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Image } from 'react-native';
-import bell from '../assets/bell.png';
-import newspaper from '../assets/newspaper.png';
-import { Home } from './screens/Home';
-import { Profile } from './screens/Profile';
-import { Settings } from './screens/Settings';
-import { Updates } from './screens/Updates';
-import { NotFound } from './screens/NotFound';
+import DashboardScreen from "../screens/Dashboard";
+import AddPlantScreen from "../screens/AddPlantScreen";
+import TipScreen from "../screens/TipScreen";
+import SettingsScreen from "../screens/SettingsScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Icon, SunIcon } from "@/components/ui/icon";
+import LogIn from "../screens/LogIn";
+import { View } from "react-native";
 
-const HomeTabs = createBottomTabNavigator({
-  screens: {
-    Home: {
-      screen: Home,
-      options: {
-        title: 'Feed',
-        tabBarIcon: ({ color, size }) => (
-          <Image
-            source={newspaper}
-            tintColor={color}
-            style={{
-              width: size,
-              height: size,
-            }}
-          />
-        ),
-      },
-    },
-    Updates: {
-      screen: Updates,
-      options: {
-        tabBarIcon: ({ color, size }) => (
-          <Image
-            source={bell}
-            tintColor={color}
-            style={{
-              width: size,
-              height: size,
-            }}
-          />
-        ),
-      },
-    },
-  },
-});
+const Stack = createNativeStackNavigator()
+const Tab = createBottomTabNavigator()
 
-const RootStack = createNativeStackNavigator({
-  screens: {
-    HomeTabs: {
-      screen: HomeTabs,
-      options: {
-        title: 'Home',
-        headerShown: false,
-      },
-    },
-    Profile: {
-      screen: Profile,
-      linking: {
-        path: ':user(@[a-zA-Z0-9-_]+)',
-        parse: {
-          user: (value) => value.replace(/^@/, ''),
-        },
-        stringify: {
-          user: (value) => `@${value}`,
-        },
-      },
-    },
-    Settings: {
-      screen: Settings,
-      options: ({ navigation }) => ({
-        presentation: 'modal',
-        headerRight: () => (
-          <HeaderButton onPress={navigation.goBack}>
-            <Text>Close</Text>
-          </HeaderButton>
-        ),
-      }),
-    },
-    NotFound: {
-      screen: NotFound,
-      options: {
-        title: '404',
-      },
-      linking: {
-        path: '*',
-      },
-    },
-  },
-});
+const LogInTab = () => {
+    return (
+        <Stack.Navigator>
+            <Tab.Screen name="LogIn" component={LogIn} options={() => ({
+                tabBarStyle: { display: "none" },
+                headerStyle: { display: "none" },
+                headerShown: false
+            })} />
+        </Stack.Navigator>
+    )
+}
 
-export const Navigation = createStaticNavigation(RootStack);
 
-type RootStackParamList = StaticParamList<typeof RootStack>;
+export default function Navigation() {
+    const isLoggedIn = false
 
-declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
-  }
+    return (
+        <Tab.Navigator>
+            {isLoggedIn ? (
+                <>
+                    <Tab.Screen name="Dashboard" component={DashboardScreen} options={({ route }) => ({ tabBarIcon: ({ }) => <Icon as={SunIcon} /> })} />
+                    <Stack.Screen name="AddPlant" component={AddPlantScreen} options={{ title: 'Add Plant' }} />
+                    <Stack.Screen name="Tips" component={TipScreen} />
+                    <Stack.Screen name="Settings" component={SettingsScreen} />
+                </>
+            )
+                :
+                <Tab.Screen name="LogIn" component={LogIn} options={() => ({
+                    tabBarStyle: { display: "none" },
+                    headerStyle: { display: "none" },
+                    headerShown: false
+                })} />}
+        </Tab.Navigator>
+    )
 }
