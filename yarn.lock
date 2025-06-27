@@ -1157,6 +1157,14 @@
   resolved "https://registry.npmjs.org/@gluestack-ui/divider/-/divider-0.1.10.tgz"
   integrity sha512-/hZx1Rmy4Pgln9AwAprAEQcxYPEHjHSNF4xCUWlK/q0peyiMT5Nagt54VnxykVn5A0b2zg5QKP0pOqOF9xeE6w==
 
+"@gluestack-ui/form-control@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.npmjs.org/@gluestack-ui/form-control/-/form-control-0.1.19.tgz"
+  integrity sha512-6YbPbi/RZrXc5DyVPbxPV17FYaBoEl1yAdSwut8iE6n+yQekjluINrh2q5ZPWF2SGmyo7VSNcL85yeU5I97xHg==
+  dependencies:
+    "@gluestack-ui/utils" "^0.1.14"
+    "@react-native-aria/focus" "^0.2.9"
+
 "@gluestack-ui/hooks@0.1.13":
   version "0.1.13"
   resolved "https://registry.npmjs.org/@gluestack-ui/hooks/-/hooks-0.1.13.tgz"
@@ -1170,6 +1178,16 @@
     "@gluestack-ui/provider" "^0.1.19"
     "@gluestack-ui/utils" "^0.1.14"
     "@react-native-aria/focus" "^0.2.9"
+
+"@gluestack-ui/input@^0.1.38":
+  version "0.1.38"
+  resolved "https://registry.npmjs.org/@gluestack-ui/input/-/input-0.1.38.tgz"
+  integrity sha512-NzwDOXkkMYzBQ0h7UnhKA2h54/qlxDxMFGXykkmYOl7mc7QJc1aJaveo4yMHtpYvcQG17xLyD+Z+5CQYA76nvw==
+  dependencies:
+    "@gluestack-ui/form-control" "^0.1.19"
+    "@gluestack-ui/utils" "^0.1.15"
+    "@react-native-aria/focus" "^0.2.9"
+    "@react-native-aria/interactions" "0.2.16"
 
 "@gluestack-ui/nativewind-utils@^1.0.26":
   version "1.0.26"
@@ -1226,7 +1244,7 @@
     "@gluestack-ui/utils" "^0.1.14"
     "@react-native-aria/focus" "^0.2.9"
 
-"@gluestack-ui/utils@^0.1.14", "@gluestack-ui/utils@0.1.15":
+"@gluestack-ui/utils@^0.1.14", "@gluestack-ui/utils@^0.1.15", "@gluestack-ui/utils@0.1.15":
   version "0.1.15"
   resolved "https://registry.npmjs.org/@gluestack-ui/utils/-/utils-0.1.15.tgz"
   integrity sha512-LRBMv+tr+bV4falMYS2zSt94PxL0vpvUN6F9d6oTqOYKhkiAkU6k2ROfNlT323m0CoTQto1LkJhPxULisQ2oeQ==

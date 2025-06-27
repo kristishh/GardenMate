@@ -2,24 +2,43 @@ import DashboardScreen from "../screens/Dashboard";
 import AddPlantScreen from "../screens/AddPlantScreen";
 import TipScreen from "../screens/TipScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator, NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon, SunIcon } from "@/components/ui/icon";
-import LogIn from "../screens/LogIn";
-import { View } from "react-native";
+import Guest from "../screens/Guest";
+import SignIn from "../screens/SignIn";
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
+import { Text } from "@/components/ui/text";
+import SignUp from "../screens/SignUp";
+import Auth from "../screens/Auth";
 
-const Stack = createNativeStackNavigator()
+export type RootStackParamList = {
+    'Sign In': undefined,
+    'Sign Up': undefined,
+    Guest: undefined,
+    "Add Plant": undefined,
+    Dashboard: undefined
+    Tips: undefined
+    Settings: undefined
+    NoSession: undefined
+    Auth: { authType: "signIn" | "signUp"}
+}
+
+export type NavigationProps = NativeStackNavigationProp<RootStackParamList>
+export type AuthProps = NativeStackScreenProps<RootStackParamList, 'Auth'>;
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator()
 
-const LogInTab = () => {
+const NoSession = () => {
     return (
-        <Stack.Navigator>
-            <Tab.Screen name="LogIn" component={LogIn} options={() => ({
+        <Tab.Navigator initialRouteName="Guest">
+            <Tab.Screen name="Guest" component={Guest} options={() => ({
                 tabBarStyle: { display: "none" },
-                headerStyle: { display: "none" },
-                headerShown: false
+                headerShown: false,
             })} />
-        </Stack.Navigator>
+        </Tab.Navigator>
     )
 }
 
@@ -28,21 +47,41 @@ export default function Navigation() {
     const isLoggedIn = false
 
     return (
-        <Tab.Navigator>
+        <Stack.Navigator>
             {isLoggedIn ? (
                 <>
                     <Tab.Screen name="Dashboard" component={DashboardScreen} options={({ route }) => ({ tabBarIcon: ({ }) => <Icon as={SunIcon} /> })} />
-                    <Stack.Screen name="AddPlant" component={AddPlantScreen} options={{ title: 'Add Plant' }} />
+                    <Stack.Screen name="Add Plant" component={AddPlantScreen} options={{ title: 'Add Plant' }} />
                     <Stack.Screen name="Tips" component={TipScreen} />
                     <Stack.Screen name="Settings" component={SettingsScreen} />
                 </>
             )
                 :
-                <Tab.Screen name="LogIn" component={LogIn} options={() => ({
-                    tabBarStyle: { display: "none" },
-                    headerStyle: { display: "none" },
-                    headerShown: false
-                })} />}
-        </Tab.Navigator>
+                <>
+                    <Tab.Screen name="NoSession" component={NoSession} options={() => ({
+                        headerShown: false,
+                    })} />
+                    <Stack.Screen name="Auth" component={Auth} options={() => ({
+                        tabBarStyle: { display: "none" },
+                        presentation: 'modal',
+                        headerTitleAlign: 'center',
+                        headerStyle: {
+                            backgroundColor: '#F0F8F5',
+                        },
+                        // headerTitle: ({route}) => {
+                        //     title: route.params.
+                        // },
+                        headerLeft: () => {
+                            const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+                            return (
+                                <TouchableOpacity onPress={() => navigation.goBack()} className="ml-10">
+                                    <Text className="text-primaryGreen size-36 font-medium justify-center h-full">Back</Text>
+                                </TouchableOpacity>
+                            )
+                        }
+                    })} />
+                </>
+            }
+        </Stack.Navigator>
     )
 }
