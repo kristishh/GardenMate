@@ -6,23 +6,20 @@ import { createNativeStackNavigator, NativeStackNavigationProp, NativeStackScree
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon, SunIcon } from "@/components/ui/icon";
 import Guest from "../screens/Guest";
-import SignIn from "../screens/SignIn";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { Text } from "@/components/ui/text";
-import SignUp from "../screens/SignUp";
 import Auth from "../screens/Auth";
+import useAuth from "../hooks/useAuth";
 
 export type RootStackParamList = {
-    'Sign In': undefined,
-    'Sign Up': undefined,
     Guest: undefined,
     "Add Plant": undefined,
     Dashboard: undefined
     Tips: undefined
     Settings: undefined
     NoSession: undefined
-    Auth: { authType: "signIn" | "signUp"}
+    Auth: { authType: "signIn" | "signUp", errorMessage: string | null }
 }
 
 export type NavigationProps = NativeStackNavigationProp<RootStackParamList>
@@ -44,11 +41,11 @@ const NoSession = () => {
 
 
 export default function Navigation() {
-    const isLoggedIn = false
+    const { user } = useAuth()
 
     return (
-        <Stack.Navigator>
-            {isLoggedIn ? (
+        <Tab.Navigator>
+            {user ? (
                 <>
                     <Tab.Screen name="Dashboard" component={DashboardScreen} options={({ route }) => ({ tabBarIcon: ({ }) => <Icon as={SunIcon} /> })} />
                     <Stack.Screen name="Add Plant" component={AddPlantScreen} options={{ title: 'Add Plant' }} />
@@ -60,7 +57,11 @@ export default function Navigation() {
                 <>
                     <Tab.Screen name="NoSession" component={NoSession} options={() => ({
                         headerShown: false,
+                        tabBarStyle: { display: "none" },
+
                     })} />
+                    <Stack.Group screenOptions={{presentation: 'modal'}}>
+
                     <Stack.Screen name="Auth" component={Auth} options={() => ({
                         tabBarStyle: { display: "none" },
                         presentation: 'modal',
@@ -68,9 +69,6 @@ export default function Navigation() {
                         headerStyle: {
                             backgroundColor: '#F0F8F5',
                         },
-                        // headerTitle: ({route}) => {
-                        //     title: route.params.
-                        // },
                         headerLeft: () => {
                             const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
                             return (
@@ -80,8 +78,9 @@ export default function Navigation() {
                             )
                         }
                     })} />
+                    </Stack.Group>
                 </>
             }
-        </Stack.Navigator>
+        </Tab.Navigator>
     )
 }
