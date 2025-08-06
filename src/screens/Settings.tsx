@@ -3,7 +3,7 @@ import { auth } from "@/firebaseConfig";
 import { signOut } from "firebase/auth";
 import { Text, View } from "react-native";
 
-export default function SettingsScreen() {
+export default function Settings() {
     
     return (
         <View>

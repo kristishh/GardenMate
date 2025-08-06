@@ -1,7 +1,7 @@
-import DashboardScreen from "../screens/Dashboard";
-import AddPlantScreen from "../screens/AddPlantScreen";
-import TipScreen from "../screens/TipScreen";
-import SettingsScreen from "../screens/SettingsScreen";
+import DashboardScreen from "../screens/Home";
+import AddPlant from "../screens/AddPlant";
+import Tips from "../screens/Tips";
+import SettingsScreen from "../screens/Settings";
 import { createNativeStackNavigator, NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon, SunIcon } from "@/components/ui/icon";
@@ -48,8 +48,8 @@ export default function Navigation() {
             {user ? (
                 <>
                     <Tab.Screen name="Dashboard" component={DashboardScreen} options={({ route }) => ({ tabBarIcon: ({ }) => <Icon as={SunIcon} /> })} />
-                    <Stack.Screen name="Add Plant" component={AddPlantScreen} options={{ title: 'Add Plant' }} />
-                    <Stack.Screen name="Tips" component={TipScreen} />
+                    <Stack.Screen name="Add Plant" component={AddPlant} options={{ title: 'Add Plant' }} />
+                    <Stack.Screen name="Tips" component={Tips} />
                     <Stack.Screen name="Settings" component={SettingsScreen} />
                 </>
             )

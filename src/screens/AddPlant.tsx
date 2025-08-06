@@ -13,7 +13,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation";
 import { useNavigation } from "@react-navigation/native";
 
-export default function AddPlantScreen() {
+export default function AddPlant() {
     const [images, setImages] = useState<ImagePickerAsset[] | []>([]);
     const [name, setName] = useState<string>('')
     const [date, setDate] = useState<Date>(new Date())
