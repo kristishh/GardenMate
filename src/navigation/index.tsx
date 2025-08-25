@@ -1,4 +1,4 @@
-import DashboardScreen from "../screens/Home";
+import Home from "../screens/Home";
 import AddPlant from "../screens/AddPlant";
 import Tips from "../screens/Tips";
 import SettingsScreen from "../screens/Settings";
@@ -15,7 +15,7 @@ import useAuth from "../hooks/useAuth";
 export type RootStackParamList = {
     Guest: undefined,
     "Add Plant": undefined,
-    Dashboard: undefined
+    Home: undefined
     Tips: undefined
     Settings: undefined
     NoSession: undefined
@@ -47,7 +47,7 @@ export default function Navigation() {
         <Tab.Navigator>
             {user ? (
                 <>
-                    <Tab.Screen name="Dashboard" component={DashboardScreen} options={({ route }) => ({ tabBarIcon: ({ }) => <Icon as={SunIcon} /> })} />
+                    <Tab.Screen name="Home" component={Home} options={({ route }) => ({ tabBarIcon: ({ }) => <Icon as={SunIcon} /> })} />
                     <Stack.Screen name="Add Plant" component={AddPlant} options={{ title: 'Add Plant' }} />
                     <Stack.Screen name="Tips" component={Tips} />
                     <Stack.Screen name="Settings" component={SettingsScreen} />

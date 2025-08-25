@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
-import ImageCarousel from "../components/addImages/ImageCarousel";
+import { useNavigation } from "@react-navigation/native";
 import { ImagePickerAsset } from "expo-image-picker";
-import InputField from "../components/shared/InputField";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FormControl } from "@/components/ui/form-control";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
+import { firebaseDB } from "@/firebaseConfig";
+import ImageCarousel from "../components/addImages/ImageCarousel";
+import InputField from "../components/shared/InputField";
 import AuthButton from "../components/shared/AuthButton";
-import { addDoc, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { firebaseDB, uploadImageToFirebaseStorage } from "@/firebaseConfig";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation";
-import { useNavigation } from "@react-navigation/native";
+import { uploadImage } from "../services";
 
 export default function AddPlant() {
     const [images, setImages] = useState<ImagePickerAsset[] | []>([]);
@@ -20,7 +21,6 @@ export default function AddPlant() {
     const [description, setDescription] = useState<string>()
     const [isLoading, setIsLoading] = useState(false)
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-
 
     const handleSave = async () => {
         if (!name) {
@@ -39,7 +39,7 @@ export default function AddPlant() {
             const imagesCollectionRef = collection(firebaseDB, "images"); 
 
             for (const asset of images) {
-                const downloadURL = await uploadImageToFirebaseStorage(asset);
+                const downloadURL = await uploadImage(asset)
                 
                  await addDoc(imagesCollectionRef, {
                     imageUrl: downloadURL,
@@ -52,7 +52,7 @@ export default function AddPlant() {
             setDescription('')
             setDate(new Date())
             setIsLoading(false)
-            navigation.navigate('Dashboard')
+            navigation.navigate('Home')
         } catch (error) {
             console.log(error);
             
