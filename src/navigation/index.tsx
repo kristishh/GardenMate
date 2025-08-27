@@ -4,7 +4,7 @@ import Tips from "../screens/Tips";
 import SettingsScreen from "../screens/Settings";
 import { createNativeStackNavigator, NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon, SunIcon } from "@/components/ui/icon";
+import { AddIcon, Icon, InfoIcon, SettingsIcon, SunIcon } from "@/components/ui/icon";
 import Guest from "../screens/Guest";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
@@ -28,6 +28,11 @@ export type AuthProps = NativeStackScreenProps<RootStackParamList, 'Auth'>;
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator()
 
+const BottomTabIcon = (props: any) => {
+    const { focused, icon } = props
+    return <Icon as={icon} className={`${focused ? 'color-primaryGreen' : 'color-gray-500'}`} />
+}
+
 const NoSession = () => {
     return (
         <Tab.Navigator initialRouteName="Guest">
@@ -42,16 +47,17 @@ const NoSession = () => {
 
 export default function Navigation() {
     const { user } = useAuth()
-
+    console.log(user);
+    
     return (
-        <Tab.Navigator>
+        <Tab.Navigator {...{ screenOptions: { headerTintColor: '#14905C' } }}>
             {user ? (
-                <>
-                    <Tab.Screen name="Home" component={Home} options={({ route }) => ({ tabBarIcon: ({ }) => <Icon as={SunIcon} /> })} />
-                    <Stack.Screen name="Add Plant" component={AddPlant} options={{ title: 'Add Plant' }} />
-                    <Stack.Screen name="Tips" component={Tips} />
-                    <Stack.Screen name="Settings" component={SettingsScreen} />
-                </>
+                <Tab.Group screenOptions={{ tabBarActiveTintColor: '#14905C' }}>
+                    <Tab.Screen name="Home" component={Home} options={() => ({ tabBarIcon: ({ focused }) => <BottomTabIcon icon={SunIcon} focused={focused} /> })} />
+                    <Tab.Screen name="Add Plant" component={AddPlant} options={{ title: 'Add Plant', tabBarIcon: ({ focused }) => <BottomTabIcon icon={AddIcon} focused={focused} /> }} />
+                    <Tab.Screen name="Tips" component={Tips} options={() => ({ tabBarIcon: ({ focused }) => <BottomTabIcon icon={InfoIcon} focused={focused} /> })} />
+                    <Tab.Screen name="Settings" component={SettingsScreen} options={() => ({ tabBarIcon: ({ focused }) => <BottomTabIcon icon={SettingsIcon} focused={focused} /> })} />
+                </Tab.Group>
             )
                 :
                 <>
@@ -60,24 +66,19 @@ export default function Navigation() {
                         tabBarStyle: { display: "none" },
 
                     })} />
-                    <Stack.Group screenOptions={{presentation: 'modal'}}>
-
-                    <Stack.Screen name="Auth" component={Auth} options={() => ({
-                        tabBarStyle: { display: "none" },
-                        presentation: 'modal',
-                        headerTitleAlign: 'center',
-                        headerStyle: {
-                            backgroundColor: '#F0F8F5',
-                        },
-                        headerLeft: () => {
-                            const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-                            return (
-                                <TouchableOpacity onPress={() => navigation.goBack()} className="ml-10">
-                                    <Text className="text-primaryGreen size-36 font-medium justify-center h-full">Back</Text>
-                                </TouchableOpacity>
-                            )
-                        }
-                    })} />
+                    <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                        <Stack.Screen name="Auth" component={Auth} options={({ route }) => ({
+                            tabBarStyle: { display: "none" },
+                            headerTitle: '',
+                            headerLeft: () => {
+                                const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+                                return (
+                                    <TouchableOpacity onPress={() => navigation.goBack()} className="ml-10">
+                                        <Text className="text-primaryGreen size-36 font-medium justify-center h-full">Back</Text>
+                                    </TouchableOpacity>
+                                )
+                            }
+                        })} />
                     </Stack.Group>
                 </>
             }

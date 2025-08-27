@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ScrollView, Text, View } from "react-native";
-import { fetchPlantsWithImages } from "../services";
 import { Timestamp } from "firebase/firestore";
 import ImageCarousel from "../components/addImages/ImageCarousel";
 import usePlantsFacade from "../facades/usePlantsFacade";
