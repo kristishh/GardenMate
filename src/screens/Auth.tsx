@@ -3,7 +3,7 @@ import AuthForm from "../components/shared/AuthForm";
 import { AuthProps } from "../navigation";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from "@/firebaseConfig";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Auth({ navigation, route }: AuthProps) {
     const isSignUpFlow = route.params.authType === "signUp"
@@ -38,6 +38,11 @@ export default function Auth({ navigation, route }: AuthProps) {
         }
     }
 
+    useEffect(() => {
+        navigation.setOptions({
+            title: isSignUpFlow ? 'Sign up' : 'Sign in', // 🎯 Set the title from your data
+        });
+    }, [navigation]);
 
     return (
         <View className="h-full p-5 bg-tertiaryGreen">
