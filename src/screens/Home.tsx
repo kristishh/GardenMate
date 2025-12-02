@@ -30,7 +30,7 @@ export default function Home() {
             <ScrollView>
                 {plantsWithImages.map((plant, index) => {
                     return (
-                        <Pressable onPress={() => navigation.navigate('NestedStack', { screen: 'SinglePlant', params: { id: plant.id } })}>
+                        <Pressable onPress={() => navigation.navigate('NestedStack', { screen: 'SinglePlant', params: { id: plant.id, title: plant.name } })}>
                             <View key={plant.id} className="bg-primaryGreen m-5 gap-y-5 p-5 rounded-lg shadow-md">
                                 {plant.imageUrls.length > 0 && <ImageCarousel images={plant.imageUrls} previewOnly={true} />}
                                 <Text className="color-white">{plant.name}</Text>

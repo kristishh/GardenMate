@@ -14,13 +14,12 @@ import useAuth from "../hooks/useAuth";
 import SinglePlant from "../screens/SinglePlant";
 
 type NestedStackParamList = {
-    SinglePlant: { id: string };
+    SinglePlant: { id: string, title: string };
 }
 const Stack = createNativeStackNavigator<NestedStackParamList>()
 
 export type RootStackParamList = {
     HomeTabs: undefined;
-    SinglePlant: { id: string };
     Auth: { authType: "signIn" | "signUp", errorMessage: string | null };
     NoSession: undefined;
     NestedStack: NavigatorScreenParams<NestedStackParamList>;
@@ -35,7 +34,7 @@ export type HomeTabParamList = {
 
 export type NavigationProps = NativeStackNavigationProp<RootStackParamList>
 export type AuthProps = NativeStackScreenProps<RootStackParamList, 'Auth'>
-export type SinglePlantProps = NativeStackScreenProps<RootStackParamList, 'SinglePlant'>;
+export type SinglePlantProps = NativeStackScreenProps<NestedStackParamList, 'SinglePlant'>;
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 const BottomTabIcon = (props: any) => {
@@ -43,8 +42,9 @@ const BottomTabIcon = (props: any) => {
     return <Icon as={icon} className={`${focused ? 'color-primaryGreen' : 'color-gray-500'}`} />
 }
 
+const Tab = createBottomTabNavigator()
+
 const MainTabNavigator = () => {
-    const Tab = createBottomTabNavigator()
 
     return (
         <Tab.Navigator screenOptions={{ tabBarActiveTintColor: '#14905C' }}>
@@ -68,8 +68,20 @@ const NoSessionTabNavigator = () => {
 
 export const PlantStack = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="SinglePlant" component={SinglePlant} />
+        <Stack.Navigator>
+            <Stack.Screen name="SinglePlant" component={SinglePlant}
+                options={({ route, navigation }) => ({
+                    title: route.params?.title || 'Plant Details',
+                    headerTitleAlign: 'center',
+                    headerLeft: ({ canGoBack }) => {
+                        return (
+                            <TouchableOpacity onPress={() => navigation.goBack()}>
+                                <Text style={{ color: 'green', padding: 3 }} bold={true}>{'Go back'}</Text>
+                            </TouchableOpacity>
+                        );
+                    },
+                })}
+            />
         </Stack.Navigator>
     );
 };
@@ -82,7 +94,7 @@ export default function Navigation() {
             {user ? (
                 <RootStack.Group>
                     <RootStack.Screen name="HomeTabs" component={MainTabNavigator} options={{ headerShown: false }} />
-                    <RootStack.Screen name="NestedStack" component={PlantStack} options={{ headerBackTitle: 'Home', presentation: 'card' }} />
+                    <RootStack.Screen name="NestedStack" component={PlantStack} options={{ headerShown: false }} />
                 </RootStack.Group>
             ) : (
                 <>
