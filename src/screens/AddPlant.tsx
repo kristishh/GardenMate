@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ImagePickerAsset } from "expo-image-picker";
@@ -13,10 +13,15 @@ import InputField from "../components/shared/InputField";
 import AuthButton from "../components/shared/AuthButton";
 import { RootStackParamList } from "../navigation";
 import { uploadImage } from "../services";
+import Dropdown from "../components/shared/Dropdown";
+import usePlantTypesFacade from "../facades/usePlantTypesFacade";
+import { PlantTypes } from "../types/index";
 
 export default function AddPlant() {
+    const { loading, plantTypes, fetchPlantTypes } = usePlantTypesFacade()
     const [images, setImages] = useState<ImagePickerAsset[] | []>([]);
     const [name, setName] = useState<string>('')
+    const [type, setType] = useState<PlantTypes["name"] | null>(null)
     const [date, setDate] = useState<Date>(new Date())
     const [description, setDescription] = useState<string>()
     const [isLoading, setIsLoading] = useState(false)
@@ -32,6 +37,7 @@ export default function AddPlant() {
             setIsLoading(true)
             const newPlantDocRef = await addDoc(plantsCollectionRef, {
                 name: name,
+                plantType: type,
                 notes: description,
                 plantedOn: date
             });
@@ -48,17 +54,25 @@ export default function AddPlant() {
                 });
             }
             setName('')
+            setType(null)
             setImages([])
             setDescription('')
             setDate(new Date())
             setIsLoading(false)
-            navigation.navigate('Home')
+            navigation.navigate('HomeTabs')
         } catch (error) {
             console.log(error);
             
             Alert.alert("Something went wrong")
+            setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        fetchPlantTypes()
+    }, [])
+
+    if(loading) return null
 
     return (
         <View className="h-full bg-tertiaryGreen">
@@ -85,6 +99,7 @@ export default function AddPlant() {
                         inputVariant="underlined"
                         onChangeText={(text) => setName(text)}
                     />
+                    <Dropdown onSelect={setType} options={plantTypes} variant={"rounded"} size={"lg"}/>
                     <View className="flex-row items-center shadow-md bg-white p-5 rounded-lg">
                         <Text className="text-lg">Planted on</Text>
                         <RNDateTimePicker className="color-primaryGreen" value={date} onChange={(e, date) => setDate(date as Date)} />

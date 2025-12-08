@@ -1,5 +1,5 @@
 import { firebaseDB } from "@/firebaseConfig";
-import { collection, DocumentData, DocumentReference, doc, getDocs, query, QuerySnapshot, Timestamp, where, orderBy } from "firebase/firestore";
+import { collection, DocumentData, doc, getDocs, query, QuerySnapshot, where, orderBy } from "firebase/firestore";
 import { Plant, PlantImage } from "../types/index";
 
 

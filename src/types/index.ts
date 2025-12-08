@@ -15,3 +15,8 @@ export interface PlantImage {
     plantRef: DocumentReference;
     uploadedAt: Timestamp;
 }
+
+export interface PlantTypes {
+    id: string;
+    name: string;
+}
