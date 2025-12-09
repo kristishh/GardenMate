@@ -34,7 +34,7 @@ export default function Home() {
                             <View key={plant.id} className="bg-primaryGreen m-5 gap-y-5 p-5 rounded-lg shadow-md">
                                 {plant.imageUrls.length > 0 && <ImageCarousel images={plant.imageUrls} previewOnly={true} />}
                                 <Text className="color-white">{plant.name}</Text>
-                                {plant.notes && <Text className="color-white">{plant.notes}</Text>}
+                                {plant.notes && <Text className="color-white truncate text-wrap h-10 ">{plant.notes}</Text>}
                                 <Text className="color-white" >{plant.plantedOn.toDate().toDateString()}</Text>
                             </View>
                         </Pressable>

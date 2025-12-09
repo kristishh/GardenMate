@@ -1,6 +1,13 @@
 import { firebaseDB } from "@/firebaseConfig";
-import { collection, DocumentData, doc, getDocs, query, QuerySnapshot, where, orderBy } from "firebase/firestore";
+import { collection, DocumentData, doc, getDocs, query, QuerySnapshot, where, orderBy, updateDoc } from "firebase/firestore";
 import { Plant, PlantImage } from "../types/index";
+
+export const updatePlantNotes = async (plantId: string, newNotes: string): Promise<void> => {
+    const plantRef = doc(firebaseDB, "plants", plantId);
+    return await updateDoc(plantRef, {
+        notes: newNotes,
+    });
+};
 
 
 export const fetchPlantsWithImages = async (): Promise<Plant[]> => {

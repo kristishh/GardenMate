@@ -1,9 +1,15 @@
-import { Text, View } from "react-native"
 import { SinglePlantProps } from "../navigation"
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import usePlantsFacade from "../facades/usePlantsFacade";
+import React from 'react';
+import PlantDetails from "../components/singlePlant/PlantDetails";
 
 const SinglePlant = ({ route, navigation }: SinglePlantProps) => {
+    const { plantsWithImages } = usePlantsFacade()
     const { id, title } = route.params
+    const plant = useMemo(() => {
+        return plantsWithImages.find(plant => plant.id == id)
+    }, [id, plantsWithImages])
 
     useEffect(() => {
         navigation.setOptions({
@@ -13,13 +19,11 @@ const SinglePlant = ({ route, navigation }: SinglePlantProps) => {
         })
     }, [navigation, id])
 
-    return (
-        <View>
-            <Text>
-                Signle PLant page {title}
-            </Text>
-        </View>
-    )
+    if(!plant) return
+    
+ return (
+    <PlantDetails {...{plant}} />
+ )
 }
 
 export default SinglePlant

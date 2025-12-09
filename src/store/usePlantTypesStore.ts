@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { PlantTypes } from "../types/index";
-import { fetchPlantTypes } from "../services/fetchPlantTypes";
+import { fetchPlantTypes } from "../services";
 
 interface PlantTypesState {
     plantTypes: PlantTypes[];
