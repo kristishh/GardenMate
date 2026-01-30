@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { fetchPlantsWithImages, updatePlantNotes } from "../services";
+import { deletePlants, fetchPlantsWithImages, updatePlantNotes } from "../services";
 import { Plant } from "../types/index";
 
 interface PlantState {
@@ -8,6 +8,7 @@ interface PlantState {
     error: string | null;
     fetchPlantsWithImages: () => Promise<void>;
     updatePlantNotes: (plantId: string, newNotes: string) => Promise<void>;
+    deletePlants: (plantsToDelete: Plant[]) => Promise<void>
 }
 
 const initialState = {
@@ -19,6 +20,28 @@ const usePlantsStore = create<PlantState>((set) => ({
     plantsWithImages: initialState.plantsWithImages,
     loading: initialState.loading,
     error: initialState.error,
+
+    deletePlants: async (plantsToDelete: Plant[]) => {
+        try {
+            await deletePlants(plantsToDelete)
+
+            set((state) => ({   
+                ...state,
+                plantsWithImages: state.plantsWithImages.filter(plant => !plantsToDelete.includes(plant.id)
+                ),
+            })) 
+        } catch (error: unknown) {
+            const errorMessage = (error as Error).message
+            set({
+                error: errorMessage,
+            });
+        } finally {
+            set((state) => ({
+                ...state,
+                loading: false,
+            }))
+        }
+    },
 
     updatePlantNotes: async (plantId, newNotes) => {
         try {

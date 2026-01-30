@@ -16,3 +16,14 @@ export const formatFirestoreTimestamp = (timestamp: FirestoreTimestamp): string 
         day: 'numeric',
     });
 };
+
+export const getStoragePathFromUrl = (url: string): string | null => {
+    if (url.includes('firebasestorage.googleapis.com')) {
+        const match = url.match(/\/o\/(.+?)\?/);
+
+        if (match && match[1]) {
+            return decodeURIComponent(match[1]);
+        }
+    }
+    return null;
+};

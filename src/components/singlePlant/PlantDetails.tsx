@@ -49,7 +49,8 @@ const PlantDetails = ({ plant }: PlantDetailDisplayProps) => {
         };
 
     }, [localNotes, plant.id]);
-
+    console.log(plant.imageUrls);
+    
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
